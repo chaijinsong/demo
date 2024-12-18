@@ -12,8 +12,8 @@ const LocationMarker = ({ longitude, latitude, heightAmplitude = 1000, period = 
   const positionProperty = useRef(
     new CallbackProperty((time) => {
       return calculateBouncePosition(
-        position.longitude,
-        position.latitude,
+        longitude,
+        latitude,
         time,
         animation.maxHeight,
         animation.speed

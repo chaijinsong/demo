@@ -1,6 +1,6 @@
 import { Viewer } from 'resium';
 import * as Cesium from 'cesium';
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 interface GlobeProps {
   className?: string;
   autoRotate?: boolean;
@@ -10,6 +10,11 @@ interface GlobeProps {
 
 const CesiumGlobe = ({ className = '', autoRotate = true, onMount, children }: GlobeProps) => {
   let viewer: Cesium.Viewer | null = null;
+  const rotateCamera = useRef(() => {
+    if (viewer) {
+      viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, 0.0015);
+    }
+  })
 
   console.log('CesiumGlobe re-rendered');
 
@@ -17,14 +22,24 @@ const CesiumGlobe = ({ className = '', autoRotate = true, onMount, children }: G
     viewer.scene.globe.enableLighting = true;
     viewer.scene.globe.atmosphereBrightnessShift = 0.1;
     
-    // if (autoRotate) {
-    //   viewer.clock.onTick.addEventListener(() => {
-    //     viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, 0.0015);
-    //   });
-    // }
-
+    if (autoRotate) {
+      viewer.clock.onTick.addEventListener(rotateCamera.current);
+    }
+    window.cesiumViewer = viewer;
     onMount && onMount(viewer);
   }
+
+  useEffect(() => {
+    if (viewer) {
+      if (autoRotate) {
+        console.log('autoRotate', autoRotate)
+        viewer.clock.onTick.addEventListener(rotateCamera.current);
+      } else {
+        console.log('autoRotate', autoRotate)
+        viewer.clock.onTick.removeEventListener(rotateCamera.current);
+      }
+    }
+  }, [autoRotate])
 
   return (
     <Viewer

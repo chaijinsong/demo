@@ -24,24 +24,10 @@ export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame
       );
       viewerRef.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(116.3912757, 39.906217, 2000),
-        orientation: orientation,
+        // orientation: orientation,
       });
 
       setChildren(<LocationMarker viewer={viewerRef} longitude={personalInfo.location.longitude} latitude={personalInfo.location.latitude} modelUri={personalInfo.location.modelUri}/>);
-      // console.log('frame2 viewerRef')
-      // viewerRef.camera.flyTo({
-      //   destination: Cesium.Cartesian3.fromDegrees(
-      //     personalInfo.location.longitude,
-      //     personalInfo.location.latitude,
-      //     6000
-      //   ),
-      // })
-
-      // setChildren(
-      //   <>
-      //     <LocationMarker location={personalInfo.location} />
-      //   </>
-      // )
     }
   }, [viewerRef])
 

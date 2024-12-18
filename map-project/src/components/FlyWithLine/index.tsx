@@ -25,12 +25,12 @@ const FlyWithLine: React.FC<FlyWithLineProps> = ({ viewer, from, to }) => {
     const fromPosition = Cesium.Cartesian3.fromDegrees(
       from.longitude,
       from.latitude,
-      from.height
+      0
     )
     const toPosition = Cesium.Cartesian3.fromDegrees(
       to.longitude,
       to.latitude,
-      to.height
+      0
     )
 
     // 动态路径存储
@@ -73,17 +73,30 @@ const FlyWithLine: React.FC<FlyWithLineProps> = ({ viewer, from, to }) => {
       positions.push(currentPosition) // 将当前点加入路径
       if (t < 1) {
         requestAnimationFrame(updatePath)
+      } else {
+        const finalPosition = Cesium.Cartesian3.fromDegrees(
+          to.longitude,
+          to.latitude,
+          60000
+        )
+        viewer.camera.flyTo({
+          destination: finalPosition,
+          // duration: flightDuration / 1000, // 以秒为单位
+          // easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT,
+        })
       }
     }
 
     // 启动飞行路径更新
     updatePath()
 
-    // 启动相机飞行
+    
+
+    // 启动相机飞行, 相机固定到一个比较远的地方，看到飞行轨迹后，再飞到终点
     viewer.camera.flyTo({
-      destination: toPosition,
-      duration: flightDuration / 1000, // 以秒为单位
-      easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT,
+      destination: {x: -2991916.9764840854, y: 6321235.324163195, z: 4697401.929903288},
+      // duration: flightDuration / 1000, // 以秒为单位
+      // easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT,
     })
 
     // 清理
