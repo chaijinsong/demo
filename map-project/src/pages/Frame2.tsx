@@ -1,33 +1,52 @@
-import { useEffect } from 'react';
-import LocationMarker from '../components/LocationMarker';
-import FloatingCard from '../components/FloatingCard';
-import { personalInfo } from '../data/resumeData';
-import * as Cesium from 'cesium';
+import { useEffect } from 'react'
+import LocationMarker from '../components/LocationMarker'
+import FloatingCard from '../components/FloatingCard'
+import { personalInfo } from '../data/resumeData'
+import { PersonalInfoCard } from '../components/PersonalInfoCard'
+import * as Cesium from 'cesium'
 
 interface Frame2Props {
-  onNext: () => void;
-  onPrev: () => void;
-  viewerRef: Cesium.Viewer | null;
-  setChildren: (children: React.ReactNode) => void;
+  onNext: () => void
+  onPrev: () => void
+  viewerRef: Cesium.Viewer | null
+  setChildren: (children: React.ReactNode) => void
 }
 
-export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame2Props) {
-
+export default function Frame2({
+  onNext,
+  onPrev,
+  viewerRef,
+  setChildren,
+}: Frame2Props) {
   useEffect(() => {
     if (viewerRef) {
-      console.log('frame2 viewerRef');
+      console.log('frame2 viewerRef')
       viewerRef.camera.flyTo({
-        destination: Cesium.Cartesian3.fromDegrees(116.3912757, 39.906217, 6000)
-      });
+        destination: Cesium.Cartesian3.fromDegrees(
+          116.3912757,
+          39.906217,
+          6000
+        ),
+      })
 
-      setChildren(<LocationMarker location={personalInfo.location} />);
-
+      setChildren(<LocationMarker location={personalInfo.location} />)
     }
-  }, [viewerRef]);
+  }, [viewerRef])
 
   return (
-    <div className="relative w-full h-screen" style={{pointerEvents: 'none'}}>
-      <FloatingCard title="个人信息" style={{pointerEvents: 'all'}}>
+    <div
+      className="relative w-full h-screen"
+      style={{
+        pointerEvents: 'none',
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // height: '100vh',
+        // background: '#f8f9fa',
+      }}
+    >
+      <PersonalInfoCard personalInfo={personalInfo} />
+      {/* <FloatingCard title="个人信息" style={{pointerEvents: 'all'}}>
         <p><strong>姓名:</strong> {personalInfo.name}</p>
         <p><strong>职位:</strong> {personalInfo.title}</p>
         <p><strong>技能:</strong> {personalInfo.skills.join(', ')}</p>
@@ -45,7 +64,7 @@ export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame
         >
           下一页
         </button>
-      </FloatingCard>
+      </FloatingCard> */}
     </div>
-  );
+  )
 }

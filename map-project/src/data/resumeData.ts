@@ -4,7 +4,7 @@ export const personalInfo: PersonalInfo = {
   name: "李白",
   title: "全栈开发工程师",
   skills: ["React", "Node.js", "Python", "TypeScript"],
-  email: "example@email.com",
+  email: "chaijinsong@email.com",
   location: {
     longitude: 116.3912757,
     latitude: 39.906217,
@@ -35,7 +35,7 @@ export const workExperience: WorkExperience[] = [
     period: "2021-至今",
     responsibilities: [
       "负责核心业务系统的架构设计和开发",
-      "带领团队完成多个重要项目"
+      "带领团队完成多个重要项目",
     ],
     location: {
       longitude: 116.3079,
