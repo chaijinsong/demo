@@ -3,6 +3,7 @@ export interface Location {
   latitude: number;
   height: number;
   name: string;
+  modelUri: string;
 }
 
 export interface Education {
