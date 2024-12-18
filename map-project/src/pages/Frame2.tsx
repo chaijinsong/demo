@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import LocationMarker from '../components/LocationMarker'
-import { personalInfo } from '../data/resumeData'
+import { education, personalInfo } from '../data/resumeData'
 import { PersonalInfoCard } from '../components/PersonalInfoCard'
 import * as Cesium from 'cesium'
+import FlyWithLine from '../components/FlyWithLine'
 
 interface Frame2Props {
   onNext?: () => void
@@ -23,7 +24,11 @@ export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame
         ),
       })
 
-      setChildren(<LocationMarker location={personalInfo.location} />)
+      setChildren(
+        <>
+          <LocationMarker location={personalInfo.location} />
+        </>
+      )
     }
   }, [viewerRef])
 

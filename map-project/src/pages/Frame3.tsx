@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import LocationMarker from '../components/LocationMarker'
-import { education } from '../data/resumeData'
+import { education, personalInfo } from '../data/resumeData'
 import * as Cesium from 'cesium'
 import { EducationCard } from '../components/EducationCard'
+import FlyWithLine from '../components/FlyWithLine'
 
 interface Frame3Props {
   onNext?: () => void
@@ -15,15 +16,20 @@ export default function Frame3({ onNext, onPrev, viewerRef, setChildren }: Frame
   useEffect(() => {
     if (viewerRef) {
       console.log('frame3 viewerRef')
-      viewerRef.camera.flyTo({
-        destination: Cesium.Cartesian3.fromDegrees(
-          education[0].location.longitude,
-          education[0].location.latitude,
-          6000
-        ),
-      })
+      // viewerRef.camera.flyTo({
+      //   destination: Cesium.Cartesian3.fromDegrees(
+      //     education[0].location.longitude,
+      //     education[0].location.latitude,
+      //     6000
+      //   ),
+      // })
 
-      setChildren(<LocationMarker location={education[0].location} />)
+      setChildren(
+        <>
+          <LocationMarker location={education[0].location} />
+          <FlyWithLine viewer={viewerRef} from={personalInfo.location} to={education[0].location} />
+        </>
+      )
     }
   }, [viewerRef])
 

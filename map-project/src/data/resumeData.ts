@@ -22,7 +22,7 @@ export const education: Education[] = [
     location: {
       longitude: 114.3671112,
       latitude: 30.5412196,
-      height: 50000,
+      height: 10000,
       name: "武汉"
     }
   }
@@ -40,7 +40,7 @@ export const workExperience: WorkExperience[] = [
     location: {
       longitude: 116.3079,
       latitude: 40.0563,
-      height: 50000,
+      height: 10000,
       name: "北京中关村软件园"
     }
   },
@@ -55,7 +55,7 @@ export const workExperience: WorkExperience[] = [
     location: {
       longitude: 116.4859,
       latitude: 39.9146,
-      height: 50000,
+      height: 10000,
       name: "北京望京SOHO"
     }
   }
