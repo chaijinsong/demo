@@ -16,14 +16,13 @@ const CesiumGlobe = ({ className = '', autoRotate = true, onMount, children }: G
     }
   })
 
-  console.log('CesiumGlobe re-rendered');
-
   const initViewer = (viewer: Cesium.Viewer) => {
     viewer.scene.globe.enableLighting = true;
     viewer.scene.globe.atmosphereBrightnessShift = 0.1;
-    
     if (autoRotate) {
       viewer.clock.onTick.addEventListener(rotateCamera.current);
+    } else {
+      viewer.clock.onTick.removeEventListener(rotateCamera.current);
     }
     window.cesiumViewer = viewer;
     onMount && onMount(viewer);
