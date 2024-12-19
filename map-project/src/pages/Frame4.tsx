@@ -41,8 +41,8 @@ export default function Frame3({ onNext, onPrev, viewerRef, setChildren }: Frame
       }}
     >
       <WorkExperienceCard workExperience={workExperience} />
-      <button style={{pointerEvents: 'all'}} onClick={onNext}>下一页</button>
-      <button style={{pointerEvents: 'all'}} onClick={onPrev}>上一页</button>
+      {/* <button style={{pointerEvents: 'all'}} onClick={onNext}>下一页</button>
+      <button style={{pointerEvents: 'all'}} onClick={onPrev}>上一页</button> */}
     </div>
   )
 }

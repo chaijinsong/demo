@@ -6,15 +6,21 @@ import { useEffect } from 'react';
 interface Frame1Props {
   onNext: () => void;
   viewerRef: Cesium.Viewer | null;
+  setChildren: (children: React.ReactNode) => void;
 }
 
-export default function Frame1({ onNext, viewerRef }: Frame1Props) {
+export default function Frame1({ onNext, viewerRef, setChildren }: Frame1Props) {
 
   useEffect(() => {
     if (viewerRef) {
-      viewerRef.camera.setView({
-        destination: Cesium.Cartesian3.fromDegrees(-117.16, 32.71, 40000000)
+      // viewerRef.camera.setView({
+      //   destination: Cesium.Cartesian3.fromDegrees(-117.16, 32.71, 40000000)
+      // });
+      viewerRef.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(-117.16, 32.71, 40000000),
+        // orientation: orientation,
       });
+      setChildren(null);
     }
   }, [viewerRef]);
 

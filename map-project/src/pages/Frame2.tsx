@@ -39,8 +39,8 @@ export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame
       }}
     >
       <PersonalInfoCard personalInfo={personalInfo} />
-      <button style={{pointerEvents: 'all'}} onClick={onNext}>下一页</button>
-      <button style={{pointerEvents: 'all'}} onClick={onPrev}>上一页</button>
+      {/* <button style={{pointerEvents: 'all'}} onClick={onNext}>下一页</button>
+      <button style={{pointerEvents: 'all'}} onClick={onPrev}>上一页</button> */}
     </div>
   )
 }
