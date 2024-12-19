@@ -52,7 +52,7 @@ export const WorkExperienceCard: React.FC<WorkExperienceCardProps> = ({
       style={{
         width: '400px',
         padding: '20px',
-        color: 'white',
+        color: 'black',
         fontFamily: 'Arial, sans-serif',
         position: 'absolute',
         top: '50%',

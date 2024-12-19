@@ -51,7 +51,7 @@ export const PersonalInfoCard: React.FC<PersonalInfoCardProps> = ({ personalInfo
         width: "300px",
         padding: "20px",
         borderRadius: "8px",
-        color: "white",
+        color: 'black',
         fontFamily: "Arial, sans-serif",
         position: "absolute",
         top: "50%",

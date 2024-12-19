@@ -50,7 +50,7 @@ export const EducationCard: React.FC<EducationCardProps> = ({ education }) => {
       style={{
         width: '400px',
         padding: '20px',
-        color: 'white',
+        color: 'black',
         fontFamily: 'Arial, sans-serif',
         position: 'absolute',
         top: '50%',

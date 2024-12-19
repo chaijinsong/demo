@@ -13,9 +13,15 @@ function App() {
   const [viewer, setViewer] = useState<Cesium.Viewer | null>(null);
   const [children, setChildren] = useState<React.ReactNode | null>(null);
   const [autoRotate, setAutoRotate] = useState(true);
-  const handleMount = useCallback((viewer: Cesium.Viewer) => {
+  const handleMount = useCallback((vie: Cesium.Viewer) => {
     console.log('cesium viewer mounted')
-    setViewer(viewer);
+    if (!viewer) {
+      setViewer(vie);
+      const googleMapsImageryProvider = new Cesium.UrlTemplateImageryProvider({
+        url : 'https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}' // 谷歌地图瓦片URL
+      });
+      vie.imageryLayers.addImageryProvider(googleMapsImageryProvider);
+    }
   }, []);
 
   useEffect(() => {
