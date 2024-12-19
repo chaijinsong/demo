@@ -1,20 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import anime from 'animejs'
-
-// 定义 WorkExperience 的类型
-type WorkExperience = {
-  company: string
-  position: string
-  period: string
-  responsibilities: string[]
-  location: {
-    longitude: number
-    latitude: number
-    height: number
-    name: string
-  }
-}
-
+import { WorkExperience } from '../../types'
 type WorkExperienceCardProps = {
   workExperience: WorkExperience[]
 }
@@ -49,18 +35,44 @@ export const WorkExperienceCard: React.FC<WorkExperienceCardProps> = ({
   return (
     <div
       ref={cardRef}
+      className="custom-scrollbar"
       style={{
         width: '400px',
         padding: '20px',
-        color: 'black',
+        color: 'white',
         fontFamily: 'Arial, sans-serif',
         position: 'absolute',
         top: '50%',
         right: '5%', // 居右
         transform: 'translateY(-50%)',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',
+        maxHeight: '80vh',
+        overflowY: 'auto',
+        pointerEvents: 'all',
       }}
     >
+      <style>
+        {`
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+          }
+          
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+          }
+          
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            transition: background 0.2s ease;
+          }
+          
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+          }
+        `}
+      </style>
       <h2 style={{ fontSize: '22px', marginBottom: '20px' }}>工作经历</h2>
       <div ref={contentRef}>
         {workExperience.map((work, index) => (
@@ -80,6 +92,14 @@ export const WorkExperienceCard: React.FC<WorkExperienceCardProps> = ({
               {work.responsibilities.map((resp, i) => (
                 <li key={i} style={{ fontSize: '14px' }}>
                   {resp}
+                </li>
+              ))}
+            </ul>
+            <ul style={{ margin: '5px 0', paddingLeft: '20px', opacity: 0.7 }}>
+              <li style={{ fontSize: '14px' }}>成就:</li>
+              {work.achievements.map((achievement, i) => (
+                <li key={i} style={{ fontSize: '14px' }}>
+                  {achievement}
                 </li>
               ))}
             </ul>

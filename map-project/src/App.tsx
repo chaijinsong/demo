@@ -17,10 +17,10 @@ function App() {
     console.log('cesium viewer mounted')
     if (!viewer) {
       setViewer(vie);
-      const googleMapsImageryProvider = new Cesium.UrlTemplateImageryProvider({
-        url : 'https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}' // 谷歌地图瓦片URL
-      });
-      vie.imageryLayers.addImageryProvider(googleMapsImageryProvider);
+      // const googleMapsImageryProvider = new Cesium.UrlTemplateImageryProvider({
+      //   url : 'https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}' // 谷歌地图瓦片URL
+      // });
+      // vie.imageryLayers.addImageryProvider(googleMapsImageryProvider);
     }
   }, []);
 

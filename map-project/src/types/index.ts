@@ -11,6 +11,8 @@ export interface Education {
   degree: string;
   major: string;
   period: string;
+  achievements: string[];
+  gpa: number;
   location: Location;
 }
 
@@ -19,6 +21,7 @@ export interface WorkExperience {
   position: string;
   period: string;
   responsibilities: string[];
+  achievements: string[];
   location: Location;
 }
 
@@ -28,4 +31,7 @@ export interface PersonalInfo {
   skills: string[];
   email: string;
   location: Location;
+  phone: string;
+  github: string;
+  linkedin: string;
 }

@@ -1,19 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import anime from "animejs";
+import { PersonalInfo } from "../../types";
 
-// 定义 PersonalInfo 的类型
-type PersonalInfo = {
-  name: string;
-  title: string;
-  skills: string[];
-  email: string;
-  location: {
-    longitude: number;
-    latitude: number;
-    height: number;
-    name: string;
-  };
-};
 
 type PersonalInfoCardProps = {
   personalInfo: PersonalInfo;
@@ -51,7 +39,7 @@ export const PersonalInfoCard: React.FC<PersonalInfoCardProps> = ({ personalInfo
         width: "300px",
         padding: "20px",
         borderRadius: "8px",
-        color: 'black',
+        color: 'white',
         fontFamily: "Arial, sans-serif",
         position: "absolute",
         top: "50%",
@@ -66,14 +54,28 @@ export const PersonalInfoCard: React.FC<PersonalInfoCardProps> = ({ personalInfo
         <p style={{ marginBottom: "10px", fontSize: "14px", opacity: 0.8 }}>
           {personalInfo.title}
         </p>
-        <div style={{ marginBottom: "10px" }}>
+        <div style={{ marginBottom: "10px",  }}> 
           <strong>技能:</strong>{" "}
-          {personalInfo.skills.map((skill, index) => (
-            <span key={index} style={{ marginRight: "8px" }}>
-              {skill}
-            </span>
-          ))}
+          <div className="flex flex-wrap gap-1"> 
+            {personalInfo.skills.map((skill, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
         </div>
+        <p style={{ marginBottom: "10px" }}>
+          <strong>电话:</strong> {personalInfo.phone}
+        </p>
+        <p style={{ marginBottom: "10px" }}>
+          <strong>github:</strong> {personalInfo.github}
+        </p>
+        <p style={{ marginBottom: "10px" }}>
+          <strong>linkedin:</strong> {personalInfo.linkedin}
+        </p>
         <p style={{ marginBottom: "10px" }}>
           <strong>邮箱:</strong> {personalInfo.email}
         </p>

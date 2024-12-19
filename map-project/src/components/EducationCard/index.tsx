@@ -1,19 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import anime from 'animejs'
+import { Education } from '../../types'
 
-// 定义 Education 的类型
-type Education = {
-  school: string
-  degree: string
-  major: string
-  period: string
-  location: {
-    longitude: number
-    latitude: number
-    height: number
-    name: string
-  }
-}
 
 type EducationCardProps = {
   education: Education[]
@@ -50,7 +38,7 @@ export const EducationCard: React.FC<EducationCardProps> = ({ education }) => {
       style={{
         width: '400px',
         padding: '20px',
-        color: 'black',
+        color: 'white',
         fontFamily: 'Arial, sans-serif',
         position: 'absolute',
         top: '50%',
@@ -76,6 +64,12 @@ export const EducationCard: React.FC<EducationCardProps> = ({ education }) => {
             </p>
             <p style={{ margin: '5px 0', fontSize: '14px', opacity: 0.7 }}>
               {edu.period}
+            </p>
+            <p style={{ margin: 0, fontSize: '14px' }}>
+              平均成绩: {edu.gpa}
+            </p>
+            <p style={{ margin: 0, fontSize: '14px' }}>
+              成就: {edu.achievements.join(', ')}
             </p>
             <p style={{ margin: 0, fontSize: '14px' }}>
               地点: {edu.location.name}
