@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="fetch-btn">abc/index.html页面发起请求</button>
+    <script>
+        document.getElementById('fetch-btn').addEventListener('click', () => {
+            fetch('http://localhost:9999/abc/1.txt')
+            // fetch('https://jsonplaceholder.typicode.com/todos/1')
+            //     .then(response => response.json())
+            //     .then(data => document.getElementById('response').textContent = JSON.stringify(data))
+            //     .catch(error => document.getElementById('response').textContent = 'Error fetching data: ' + error);
+        });
+    </script>
+</body>
+</html>
