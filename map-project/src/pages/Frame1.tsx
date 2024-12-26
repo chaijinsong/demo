@@ -33,12 +33,12 @@ export default function Frame1({ onNext, viewerRef, setChildren }: Frame1Props) 
     <div className="relative w-full h-screen">
       <div className="absolute inset-0 flex items-center justify-end">
         <div className="text-center text-white mr-60">
-          <h1 className="text-6xl font-bold mb-8 text-shadow-lg">李太白的简历</h1>
+          <h1 className="text-6xl font-bold mb-8 text-shadow-lg">我的简历</h1>
           <button
             onClick={onNext}
             className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2"
           >
-            <span>开始浏览</span>
+            <span>查看</span>
             <Play size={24} />
           </button>
         </div>
