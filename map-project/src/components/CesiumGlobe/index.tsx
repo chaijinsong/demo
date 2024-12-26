@@ -17,8 +17,8 @@ const CesiumGlobe = ({ className = '', autoRotate = true, onMount, children }: G
   })
 
   const initViewer = (viewer: Cesium.Viewer) => {
-    viewer.scene.globe.enableLighting = true;
-    viewer.scene.globe.atmosphereBrightnessShift = 0.1;
+    viewer.scene.globe.enableLighting = false;
+    viewer.scene.globe.atmosphereBrightnessShift = 0;
     if (autoRotate) {
       viewer.clock.onTick.addEventListener(rotateCamera.current);
     } else {
