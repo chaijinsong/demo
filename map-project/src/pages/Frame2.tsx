@@ -63,9 +63,10 @@ function generateParabolicCurve(start: Cesium.Cartesian3, end: Cesium.Cartesian3
 function drawLine(viewer: Cesium.Viewer) {
   // 发光效果材质
   const glowingMaterial = new Cesium.PolylineGlowMaterialProperty({
-    glowPower: 0.5,
-    taperPower: 0.5,
-    color: Cesium.Color.YELLOW,
+    glowPower: 0.8,
+    taperPower: 0.3,
+    color: Cesium.Color.ORANGE,
+    // color: new Cesium.Color(235, 125, 68, 1),
   });
 
   // 发射点位置
@@ -98,16 +99,15 @@ function drawLine(viewer: Cesium.Viewer) {
     }
   ]
 
-  const polylineCollection = new Cesium.PolylineCollection();
-  viewer.scene.primitives.add(polylineCollection);
-
   tips.forEach((tip, index) => {
-    polylineCollection.add({
-      show : true,
-      positions : generateParabolicCurve(startPoint, tip.point, 100, 2000),
-      width : 5,
-      // material: glowingMaterial, 线样式后面弄。
-    });
+
+    viewer.entities.add({
+      polyline: {
+        positions: generateParabolicCurve(startPoint, tip.point, 100, 2000),
+        width: 5,
+        material: glowingMaterial,
+      },
+    })
   
     // 在目标点创建一个小面板
     const panel = viewer.entities.add({
@@ -136,6 +136,19 @@ function drawLine(viewer: Cesium.Viewer) {
     panel && panel.label && adjustBillboardToLabel(panel, panel.label.text);
   });
 }
+
+// 曲线的动画效果、动态设置光线效果
+function runningPolyline(glowingMaterial) {
+  let glowStrength = 0.5;
+  function updateGlowPower() {
+    glowStrength = glowStrength === 0.5 ? 1.0 : 0.5; // 交替变化强度
+    glowingMaterial.glowPower = glowStrength;  // 更新发光强度
+  }
+  
+  setInterval(updateGlowPower, 100); // 每秒切换一次
+}
+
+
 
 // 创建 Canvas 来动态生成渐变背景图片
 function createGradientImage(width: number, height: number) {
