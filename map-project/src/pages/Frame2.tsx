@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import LocationMarker from '../components/LocationMarker';
 import { personalInfo } from '../data/resumeData';
 import * as Cesium from 'cesium';
@@ -43,19 +43,19 @@ interface Frame2Props {
 function generateParabolicCurve(start: Cesium.Cartesian3, end: Cesium.Cartesian3, numPoints: number, maxHeight: number) {
   // 计算两个点之间的插值，numPoints 决定生成多少个点，maxHeight 控制抛物线的最高点
   const points = [];
-  
+
   // 计算起始点和结束点之间的插值
   for (let i = 0; i <= numPoints; i++) {
-      const t = i / numPoints; // 插值比例，0 到 1
-      const position = Cesium.Cartesian3.lerp(start, end, t, new Cesium.Cartesian3());
+    const t = i / numPoints; // 插值比例，0 到 1
+    const position = Cesium.Cartesian3.lerp(start, end, t, new Cesium.Cartesian3());
 
-      // 计算抛物线的高度（通过 t 来计算）
-      const height = maxHeight * (1 - Math.pow(2 * t - 1, 2)); // 抛物线方程，t=0时为0，高度最大值时为t=0.5
+    // 计算抛物线的高度（通过 t 来计算）
+    const height = maxHeight * (1 - Math.pow(2 * t - 1, 2)); // 抛物线方程，t=0时为0，高度最大值时为t=0.5
 
-      // 对中间点加上高度，使得中间点为最高点
-      position.z += height;
+    // 对中间点加上高度，使得中间点为最高点
+    position.z += height;
 
-      points.push(position);
+    points.push(position);
   }
 
   return points;
@@ -65,9 +65,9 @@ function generateParabolicCurve(start: Cesium.Cartesian3, end: Cesium.Cartesian3
 function drawLine(viewer: Cesium.Viewer) {
   // 发光效果材质
   const glowingMaterial = new Cesium.PolylineGlowMaterialProperty({
-    glowPower: 0.8,
-    taperPower: 0.6,
-    color: Cesium.Color.ORANGE,
+    glowPower: 0.1,
+    taperPower: 0.9,
+    color: Cesium.Color.ORANGERED.withAlpha(0.8),
   });
 
   // 发射点位置
@@ -82,36 +82,78 @@ function drawLine(viewer: Cesium.Viewer) {
     },
   })
 
+
   const tips = [
     {
-      point: Cesium.Cartesian3.fromDegrees(116.5, 39.95, 0),
-      key: '姓名',
-      value: '柴劲松',
+      "key": "姓名",
+      "value": "柴劲松",
+      point: Cesium.Cartesian3.fromDegrees(116.33197486835621,39.994065912992966, 0),
+      curveHeight: getRandomNumberInRange(1000, 2000),
+    },
+    // {
+    //   "key": "性别",
+    //   "value": "男",
+    //   point: Cesium.Cartesian3.fromDegrees(116.35311440201328, 39.86421458140552, 0),
+    //   curveHeight: getRandomNumberInRange(1000, 2000),
+    // },
+    // {
+    //   "key": "出生日期",
+    //   "value": "1995 年 3 月 15 日",
+    //   point: Cesium.Cartesian3.fromDegrees(116.31328616210703, 39.956931325665714, 0),
+    //   curveHeight: getRandomNumberInRange(1000, 2000),
+    // },
+    {
+      "key": "手机号码",
+      "value": "15035806407",
+      point: Cesium.Cartesian3.fromDegrees(116.47571970993637,39.998954572885765, 0),
+      curveHeight: getRandomNumberInRange(1000, 2000),
     },
     {
-      point: Cesium.Cartesian3.fromDegrees(116.35311440201328,39.86421458140552, 0),
-      key: '邮箱',
-      value: '15035806407@163.com',
+      "key": "电子邮箱",
+      "value": "15035806407@163.com",
+      point: Cesium.Cartesian3.fromDegrees(116.49063412088599,39.899570429789215, 0),
+      curveHeight: getRandomNumberInRange(1000, 2000),
     },
     {
-      point: Cesium.Cartesian3.fromDegrees(116.31328616210703,39.956931325665714, 0),
-      key: '手机号',
-      value: '15035806407',
-    }
+      "key": "现居地",
+      "value": "北京市海淀区",
+      point: Cesium.Cartesian3.fromDegrees(116.4409155962572,39.84084926821931, 0),
+      curveHeight: getRandomNumberInRange(1000, 2000),
+    },
+    {
+      "key": "毕业院校",
+      "value": "武汉大学",
+      point: Cesium.Cartesian3.fromDegrees(116.3519761930329,39.85770394533406, 0),
+      curveHeight: getRandomNumberInRange(1000, 2000),
+    },
+    {
+      "key": "所学专业",
+      "value": "计算机科学与技术",
+      point: Cesium.Cartesian3.fromDegrees(116.2987688375657,39.90546569941321, 0),
+      curveHeight: getRandomNumberInRange(1000, 2000),
+    },
+    {
+      "key": "求职岗位",
+      "value": "软件工程师",
+      point: Cesium.Cartesian3.fromDegrees(116.3929074577457,39.832078163773346, 0),
+      curveHeight: getRandomNumberInRange(1000, 2000),
+    },
   ]
 
   tips.forEach((tip) => {
-    console.log(getRandomNumberInRange(1, 3));
     viewer.entities.add({
       polyline: {
-        positions: generateParabolicCurve(startPoint, tip.point, 100, 2000),
-        width: getRandomNumberInRange(1, 2),
+        positions: generateParabolicCurve(tip.point, startPoint , 1000, tip.curveHeight),
+        // width: getRandomNumberInRange(4, 6),
+        width: 10,
         material: glowingMaterial,
+        arcType: Cesium.ArcType.NONE,
+        // material: new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE),
       },
     })
 
-    hideShowPic(viewer, tip.point);
-  
+    // hideShowPic(viewer, tip.point);
+
     // 在目标点创建一个小面板
     const panel = viewer.entities.add({
       position: tip.point,
@@ -147,7 +189,7 @@ function runningPolyline(glowingMaterial) {
     glowStrength = glowStrength === 0.5 ? 1.0 : 0.5; // 交替变化强度
     glowingMaterial.glowPower = glowStrength;  // 更新发光强度
   }
-  
+
   setInterval(updateGlowPower, 100); // 每秒切换一次
 }
 
@@ -160,8 +202,10 @@ function createGradientImage(width: number, height: number) {
 
   // 创建线性渐变
   const gradient = ctx.createLinearGradient(0, 0, width, 0);
-  gradient.addColorStop(0, "blue");
-  gradient.addColorStop(1, "transparent");
+  gradient.addColorStop(0, "rgb(21 77 189)");
+  gradient.addColorStop(0.5, "rgb(41 77 150)");
+  gradient.addColorStop(1, "rgb(150 167 202)");  
+  // gradient.addColorStop(1, "transparent");
 
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
@@ -189,12 +233,12 @@ function adjustBillboardToLabel(entity, text) {
 // 重置视角
 function restoreCameraState(viewer, state) {
   viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(state.longitude, state.latitude, state.height), // 经纬度和高度
-      orientation: {
-          heading: Cesium.Math.toRadians(state.heading), // 转为弧度
-          pitch: Cesium.Math.toRadians(state.pitch),
-          roll: Cesium.Math.toRadians(state.roll),
-      },
+    destination: Cesium.Cartesian3.fromDegrees(state.longitude, state.latitude, state.height), // 经纬度和高度
+    orientation: {
+      heading: Cesium.Math.toRadians(state.heading), // 转为弧度
+      pitch: Cesium.Math.toRadians(state.pitch),
+      roll: Cesium.Math.toRadians(state.roll),
+    },
   });
 }
 
@@ -214,24 +258,24 @@ const getClicPosition = (viewer) => {
 
   // 监听鼠标左键点击事件
   handler.setInputAction(function (movement) {
-      // 获取鼠标点击的屏幕坐标
-      const position = movement.position;
+    // 获取鼠标点击的屏幕坐标
+    const position = movement.position;
 
-      // 将屏幕坐标转换为世界坐标（经纬度）
-      const ray = viewer.camera.getPickRay(position);  // 获取射线
-      const cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+    // 将屏幕坐标转换为世界坐标（经纬度）
+    const ray = viewer.camera.getPickRay(position);  // 获取射线
+    const cartesian = viewer.scene.globe.pick(ray, viewer.scene);
 
-      if (cartesian) {
-          // 如果点击的是地球表面，转换为经纬度
-          const longitudeLatitude = Cesium.Cartographic.fromCartesian(cartesian);
-          const longitude = Cesium.Math.toDegrees(longitudeLatitude.longitude);
-          const latitude = Cesium.Math.toDegrees(longitudeLatitude.latitude);
-          const height = cartesian.z;  // 获取高度
+    if (cartesian) {
+      // 如果点击的是地球表面，转换为经纬度
+      const longitudeLatitude = Cesium.Cartographic.fromCartesian(cartesian);
+      const longitude = Cesium.Math.toDegrees(longitudeLatitude.longitude);
+      const latitude = Cesium.Math.toDegrees(longitudeLatitude.latitude);
+      const height = cartesian.z;  // 获取高度
 
-          console.log(`点击位置：经度: [${longitude},${latitude}], 高度: ${height}`);
-      } else {
-          console.log('点击位置不在地球表面');
-      }
+      console.log(`点击位置：经度: [${longitude},${latitude}], 高度: ${height}`);
+    } else {
+      console.log('点击位置不在地球表面');
+    }
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
 
@@ -254,7 +298,7 @@ function hideShowPic(viewer, point, img = './imgs/green-arrow.png') {
       distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 1000000),
     },
   });
-  
+
   // 动态调整光晕效果
   viewer.scene.preRender.addEventListener(() => {
     const time = Date.now() * 0.001; // 时间因子
@@ -266,8 +310,11 @@ function hideShowPic(viewer, point, img = './imgs/green-arrow.png') {
 
 // 第二页，个人信息
 export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame2Props) {
+  const hasInited = useRef(false);
+
   useEffect(() => {
-    if (viewerRef) {
+    if (viewerRef && !hasInited.current) {
+      hasInited.current = true;
 
       drawLine(viewerRef)
       // 获取Viewer实例
@@ -282,7 +329,7 @@ export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame
       // });
 
     }
-  }, [viewerRef])
+  }, [viewerRef, hasInited])
 
   return (
     <div
