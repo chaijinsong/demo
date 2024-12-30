@@ -39,6 +39,7 @@ interface Frame2Props {
   setChildren: (children: React.ReactNode) => void
 }
 
+// 计算曲线
 function generateParabolicCurve(start: Cesium.Cartesian3, end: Cesium.Cartesian3, numPoints: number, maxHeight: number) {
   // 计算两个点之间的插值，numPoints 决定生成多少个点，maxHeight 控制抛物线的最高点
   const points = [];
@@ -60,13 +61,13 @@ function generateParabolicCurve(start: Cesium.Cartesian3, end: Cesium.Cartesian3
   return points;
 }
 
+// 画线
 function drawLine(viewer: Cesium.Viewer) {
   // 发光效果材质
   const glowingMaterial = new Cesium.PolylineGlowMaterialProperty({
     glowPower: 0.8,
-    taperPower: 0.3,
+    taperPower: 0.6,
     color: Cesium.Color.ORANGE,
-    // color: new Cesium.Color(235, 125, 68, 1),
   });
 
   // 发射点位置
@@ -99,21 +100,23 @@ function drawLine(viewer: Cesium.Viewer) {
     }
   ]
 
-  tips.forEach((tip, index) => {
-
+  tips.forEach((tip) => {
+    console.log(getRandomNumberInRange(1, 3));
     viewer.entities.add({
       polyline: {
         positions: generateParabolicCurve(startPoint, tip.point, 100, 2000),
-        width: 5,
+        width: getRandomNumberInRange(1, 2),
         material: glowingMaterial,
       },
     })
+
+    hideShowPic(viewer, tip.point);
   
     // 在目标点创建一个小面板
     const panel = viewer.entities.add({
       position: tip.point,
       billboard: {
-        image: "./imgs/frame2-text-box.png", // 自定义背景图片
+        // image: "./imgs/frame2-text-box.png", // 自定义背景图片
         horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
         verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
         pixelOffset: new Cesium.Cartesian2(0, -10),
@@ -122,9 +125,9 @@ function drawLine(viewer: Cesium.Viewer) {
         text: tip.key + ':' + tip.value, // 初始文字
         font: "16px sans-serif", // 字体样式
         fillColor: Cesium.Color.WHITE,
-        outlineColor: Cesium.Color.BLACK,
+        // outlineColor: Cesium.Color.BLACK,
         outlineWidth: 2,
-        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+        // style: Cesium.LabelStyle.FILL_AND_OUTLINE,
         horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
         verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
         pixelOffset: new Cesium.Cartesian2(0, -18),
@@ -148,8 +151,6 @@ function runningPolyline(glowingMaterial) {
   setInterval(updateGlowPower, 100); // 每秒切换一次
 }
 
-
-
 // 创建 Canvas 来动态生成渐变背景图片
 function createGradientImage(width: number, height: number) {
   const canvas = document.createElement("canvas");
@@ -168,7 +169,7 @@ function createGradientImage(width: number, height: number) {
   return canvas.toDataURL("image/png");
 }
 
-// 动态调整背景图片的宽度
+// 动态调整背景图片的宽度，适应文字
 function adjustBillboardToLabel(entity, text) {
   // 创建临时 canvas 计算文本宽度
   const canvas = document.createElement("canvas");
@@ -185,6 +186,7 @@ function adjustBillboardToLabel(entity, text) {
   entity.billboard.scale = 1.0;
 }
 
+// 重置视角
 function restoreCameraState(viewer, state) {
   viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(state.longitude, state.latitude, state.height), // 经纬度和高度
@@ -205,6 +207,7 @@ const FRAME2_DEFAULT_CAMERA_STATE = {
   "roll": 359.9979089651042
 }
 
+// 获取点击事件位置
 const getClicPosition = (viewer) => {
   // 创建一个事件处理器来监听鼠标点击
   const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
@@ -232,6 +235,34 @@ const getClicPosition = (viewer) => {
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
 
+// 获取range
+function getRandomNumberInRange(min, max) {
+  if (min > max) {
+    throw new Error("min should be less than or equal to max");
+  }
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// 动态控制图片的显影动画
+function hideShowPic(viewer, point, img = './imgs/green-arrow.png') {
+  const glowingEntity = viewer.entities.add({
+    position: point, // 北京坐标
+    billboard: {
+      image: img, // 空白图片
+      scale: 1.0,
+      disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 1000000),
+    },
+  });
+  
+  // 动态调整光晕效果
+  viewer.scene.preRender.addEventListener(() => {
+    const time = Date.now() * 0.001; // 时间因子
+    glowingEntity.billboard.color = Cesium.Color.WHITE.withAlpha(
+      0.5 + 0.5 * Math.sin(time) // 动态透明度变化
+    );
+  });
+}
 
 // 第二页，个人信息
 export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame2Props) {
