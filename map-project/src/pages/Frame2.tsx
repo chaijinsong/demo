@@ -6,6 +6,7 @@ import { HeadingPitchRoll } from 'cesium';
 import { Math as CesiumMath } from 'cesium';
 import { PersonalInfoCard } from '../components/PersonalInfoCard'
 import FlyWithLine from '../components/FlyWithLine'
+import { createGlowMaterialProperty, createFiberGlowMaterialProperty } from '../customMaterial/index.js';
 
 window.Cesium = Cesium;
 
@@ -140,15 +141,41 @@ function drawLine(viewer: Cesium.Viewer) {
     },
   ]
 
+
+  const fiberGlowMaterial = createFiberGlowMaterialProperty(Cesium.Color.ROYALBLUE, 0.8, 0.2);
+
   tips.forEach((tip) => {
+    // viewer.entities.add({
+    //   polyline: {
+    //     positions: generateParabolicCurve(tip.point, startPoint , 1000, tip.curveHeight),
+    //     // width: getRandomNumberInRange(4, 6),
+    //     width: 10,
+    //     material: glowingMaterial,
+    //     arcType: Cesium.ArcType.NONE,
+    //     // material: new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE),
+    //   },
+    // })
+
+    function computeCircle(radius) {
+      const positions = [];
+      for (let i = 0; i < 360; i++) {
+        const radians = Cesium.Math.toRadians(i);
+        positions.push(
+          new Cesium.Cartesian2(
+            radius * Math.cos(radians),
+            radius * Math.sin(radians),
+          ),
+        );
+      }
+      return positions;
+    }
+
     viewer.entities.add({
-      polyline: {
-        positions: generateParabolicCurve(tip.point, startPoint , 1000, tip.curveHeight),
-        // width: getRandomNumberInRange(4, 6),
-        width: 10,
-        material: glowingMaterial,
-        arcType: Cesium.ArcType.NONE,
-        // material: new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE),
+      polylineVolume: {
+        positions: generateParabolicCurve(tip.point, startPoint , 100, tip.curveHeight),
+        shape: computeCircle(30.0),
+        material: fiberGlowMaterial,
+        // material: createGlowMaterialProperty(Cesium.Color.ORANGE, 12),
       },
     })
 
