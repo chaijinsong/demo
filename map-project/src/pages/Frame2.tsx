@@ -73,16 +73,26 @@ function drawLine(viewer: Cesium.Viewer) {
 
   // 发射点位置
   const startPoint = Cesium.Cartesian3.fromDegrees(116.4, 39.9, 0);
-  viewer.entities.add({
+  window.startBillBoard = viewer.entities.add({
     position: startPoint,
     billboard: {
-      image: "./imgs/green-arrow.png", // 自定义背景图片
-      width: 100, // 图标宽度
-      height: 100, // 图标高度
+      image: "./imgs/mode23.png", // 自定义背景图片
+      width: 80, // 图标宽度
+      height: 80, // 图标高度
       pixelOffset: new Cesium.Cartesian2(0, -25), // 偏移，调整 Label 和图标不重叠
     },
   })
 
+  // 自己画一个圆锥体
+  // const frame2Poi = viewer.entities.add({
+  //   position: startPoint,
+  //   cylinder: {
+  //     length: 600.0,
+  //     topRadius: 400.0,
+  //     bottomRadius: 0.0,
+  //     material: Cesium.Color.ROYALBLUE.withAlpha(0.6),
+  //   },
+  // })
 
   const tips = [
     {
@@ -142,7 +152,8 @@ function drawLine(viewer: Cesium.Viewer) {
   ]
 
 
-  const fiberGlowMaterial = createFiberGlowMaterialProperty(Cesium.Color.ROYALBLUE, 0.8, 0.2);
+  // const fiberGlowMaterial = createFiberGlowMaterialProperty(Cesium.Color.ROYALBLUE, 0.8, 0.2);
+  const fiberGlowMaterial = createFiberGlowMaterialProperty(Cesium.Color.fromCssColorString("#368ae1"), 0.8, 0.2);
 
   tips.forEach((tip) => {
     // viewer.entities.add({
@@ -238,6 +249,23 @@ function createGradientImage(width: number, height: number) {
   ctx.fillRect(0, 0, width, height);
 
   return canvas.toDataURL("image/png");
+}
+
+const anitmatePoi = (viewer, poi) => {
+  if (!viewer || !poi) return;
+  const amplitude = 1000.0;  // 跳动的幅度
+  const frequency = 1.0;     // 跳动的频率（每秒钟跳动的次数）
+  let time = 0;  // 用来记录时间
+  viewer.scene.preRender.addEventListener(function(scene, currentTime) {
+    time += currentTime.secondsOfDay / 1000;  // 使用当前时间来动态更新跳动
+
+    // 根据正弦函数计算圆锥体的垂直位置，使其上下跳动
+    const yOffset = amplitude * Math.sin(frequency * time * Math.PI * 2);  // yOffset 控制跳动的幅度和频率
+    const currentPosition = Cesium.Cartesian3.fromDegrees(116.4, 39.9, 10 + yOffset); // 更新位置
+    
+    // 更新圆锥体的位置
+    poi.position = currentPosition;
+  });
 }
 
 // 动态调整背景图片的宽度，适应文字
@@ -349,11 +377,6 @@ export default function Frame2({ onNext, onPrev, viewerRef, setChildren }: Frame
       restoreCameraState(viewerRef, FRAME2_DEFAULT_CAMERA_STATE)
 
       getClicPosition(viewerRef)
-
-      // viewerRef.camera.flyTo({
-      //   destination: Cesium.Cartesian3.fromDegrees(116.4, 39.9, 2000),
-      //   // orientation: orientation,
-      // });
 
     }
   }, [viewerRef, hasInited])

@@ -46,6 +46,7 @@ function App() {
               console.log('点击位置不在地球表面');
           }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
     }
   }, []);
 
