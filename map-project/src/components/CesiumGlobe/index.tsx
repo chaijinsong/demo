@@ -8,6 +8,8 @@ interface GlobeProps {
   children?: React.ReactNode;
 }
 
+Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3MzA2MzczYi0yODU0LTQzMDUtYmNkZi0yZWVkZGVjZGRkYWUiLCJpZCI6MjY1NTY5LCJpYXQiOjE3MzU0ODI1MjV9.LrteK5qOXjS5x71s2cCmirvNyar7yXZoMkgPlA3d9pw';
+
 const CesiumGlobe = ({ className = '', autoRotate = true, onMount, children }: GlobeProps) => {
   let viewer: Cesium.Viewer | null = null;
   const rotateCamera = useRef(() => {
@@ -17,8 +19,8 @@ const CesiumGlobe = ({ className = '', autoRotate = true, onMount, children }: G
   })
 
   const initViewer = (viewer: Cesium.Viewer) => {
-    viewer.scene.globe.enableLighting = true;
-    viewer.scene.globe.atmosphereBrightnessShift = 0.1;
+    viewer.scene.globe.enableLighting = false;
+    viewer.scene.globe.atmosphereBrightnessShift = 0;
     if (autoRotate) {
       viewer.clock.onTick.addEventListener(rotateCamera.current);
     } else {

@@ -21,6 +21,32 @@ function App() {
       //   url : 'https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}' // 谷歌地图瓦片URL
       // });
       // vie.imageryLayers.addImageryProvider(googleMapsImageryProvider);
+    } else {
+      // 创建一个事件处理器来监听鼠标点击
+      const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+
+      // 监听鼠标左键点击事件
+      handler.setInputAction(function (movement) {
+          // 获取鼠标点击的屏幕坐标
+          const position = movement.position;
+
+          // 将屏幕坐标转换为世界坐标（经纬度）
+          const ray = viewer.camera.getPickRay(position);  // 获取射线
+          const cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+
+          if (cartesian) {
+              // 如果点击的是地球表面，转换为经纬度
+              const longitudeLatitude = Cesium.Cartographic.fromCartesian(cartesian);
+              const longitude = Cesium.Math.toDegrees(longitudeLatitude.longitude);
+              const latitude = Cesium.Math.toDegrees(longitudeLatitude.latitude);
+              const height = cartesian.z;  // 获取高度
+
+              console.log(`点击位置：经度: [${longitude},${latitude}], 高度: ${height}`);
+          } else {
+              console.log('点击位置不在地球表面');
+          }
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
     }
   }, []);
 
